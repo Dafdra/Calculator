@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+        #calculatorContainer {
+            margin: 0 auto;
+            padding: 20px;
+            width: 300px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        #displayArea {
+            grid-column: span 4;
+            background-color: #f0f0f0;
+            height: 50px;
+            text-align: right;
+            padding: 10px;
+            font-size: 24px;
+            border: 2px solid #000;
+        }
+
+        button {
+            width: 100%;
+            height: 50px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>This is my calculator</h1>
+
+    <div id="calculatorContainer">
+        <div id="displayArea">0</div>
+        <button>1</button>
+        <button>2</button>
+        <button>3</button>
+        <button>+</button>
+        <button>4</button>
+        <button>5</button>
+        <button>6</button>
+        <button>-</button>
+        <button>7</button>
+        <button>8</button>
+        <button>9</button>
+        <button>*</button>
+        <button>0</button>
+        <button>C</button>
+        <button>=</button>
+        <button>/</button>
+    </div>
+
+    <script>
+        // Variables to store the numbers and operator
+        let number1 = '';
+        let number2 = '';
+        let operator = '';
+        let displayArea = document.getElementById("displayArea");
+
+        // Function to update the display
+        function updateDisplay(value) {
+            displayArea.textContent = value;
+        }
+
+        // Function to handle button clicks
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', function () {
+                const buttonValue = this.textContent;
+
+                if (!isNaN(buttonValue)) {
+                    // If it's a number, add it to the appropriate number
+                    if (operator === '') {
+                        number1 += buttonValue;
+                        updateDisplay(number1);
+                    } else {
+                        number2 += buttonValue;
+                        updateDisplay(number2);
+                    }
+                } else if (buttonValue === 'C') {
+                    // Clear the calculator
+                    number1 = '';
+                    number2 = '';
+                    operator = '';
+                    updateDisplay('0');
+                } else if (buttonValue === '=') {
+                    // Perform the calculation
+                    if (number1 !== '' && number2 !== '' && operator !== '') {
+                        let result;
+                        switch (operator) {
+                            case '+':
+                                result = parseFloat(number1) + parseFloat(number2);
+                                break;
+                            case '-':
+                                result = parseFloat(number1) - parseFloat(number2);
+                                break;
+                            case '*':
+                                result = parseFloat(number1) * parseFloat(number2);
+                                break;
+                            case '/':
+                                result = parseFloat(number1) / parseFloat(number2);
+                                break;
+                        }
+                        updateDisplay(result);
+                        // Reset after calculation
+                        number1 = result.toString();
+                        number2 = '';
+                        operator = '';
+                    }
+                } else {
+                    // Set the operator (+, -, *, /)
+                    if (number1 !== '') {
+                        operator = buttonValue;
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
